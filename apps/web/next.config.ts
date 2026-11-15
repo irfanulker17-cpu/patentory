@@ -1,13 +1,16 @@
 import type { NextConfig } from "next";
 
 const isDevelopment = process.env.NODE_ENV === "development";
+const chatGptBridgeOrigin = new URL(
+  process.env.NEXT_PUBLIC_CHATGPT_BRIDGE_URL ?? "http://127.0.0.1:47831",
+).origin;
 const contentSecurityPolicy = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
   "img-src 'self' data: blob:",
-  `connect-src 'self' https://*.supabase.co wss://*.supabase.co${
+  `connect-src 'self' https://*.supabase.co wss://*.supabase.co ${chatGptBridgeOrigin}${
     isDevelopment ? " http://127.0.0.1:54321 ws://127.0.0.1:54321" : ""
   }`,
   "object-src 'none'",
